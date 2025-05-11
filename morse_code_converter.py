@@ -45,14 +45,26 @@ morse_code_rules = {
     " ": "/",
 }
 
-input_msg = input("Morse Code Converter\nType text to convert to Morse Code!\n").lower()
-input_msg_list = list(input_msg)
+keep_going = True
+while keep_going:
+    input_msg = input(
+        "Morse Code Converter\nType text to convert to Morse Code!\nEnter 'exit' to leave\n"
+    ).lower()
+    if input_msg == "exit":
+        keep_going = False
+        break
 
-output_list = []
+    input_msg_list = list(input_msg)
+    output_list = []
 
-for char in input_msg_list:
-    for key in morse_code_rules:
-        if char == key:
-            output_list.append(morse_code_rules[key])
-
-print(f"The Morse Code is: {output_list}")
+    for char in input_msg_list:
+        if char in morse_code_rules:
+            # if the space is between two words.
+            if char == " ":
+                output_list.append(morse_code_rules[char] * 7)
+                continue
+            output_list.append(morse_code_rules[char])
+        else:
+            print(f"There are illegal marks in the original input: {char}")
+            exit() # Force to leave the loop
+    print(f"The Morse Code is: {output_list}\n")
