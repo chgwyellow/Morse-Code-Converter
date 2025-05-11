@@ -45,6 +45,9 @@ morse_code_rules = {
     " ": "/",
 }
 
+# The space between two different letters
+LETTER_SEP = " " * 3
+
 keep_going = True
 while keep_going:
     input_msg = input(
@@ -52,32 +55,29 @@ while keep_going:
     ).lower()
     if input_msg == "exit":
         keep_going = False
-        break
+        continue
 
-    words = input_msg.split()
+    illegals = set(input_msg) - set(morse_code_rules.keys())
+    if illegals:
+        print(f"There are illegal letters: {', '.join(illegals)}")
+        continue
+
     output_list = []
     previous_char = None
 
-    for word in words:
-        for char in word:
-            if char not in morse_code_rules:
-                print(f"There is a illegal letter: {char}\n")
-                output_list = []  # clean the current result
-                break  # break this loop
-            # Add the char interval (Not the first letter nor the word beginning)
-            if previous_char is not None:
-                output_list.append(" " * 3)  # the interval is 3 units
+    for char in list(input_msg):
+        # previous char is space; previous char is None; current char is equal to previous char; current char is space;
+        # not need to add LETTER_SEP
+        if (
+            previous_char == " "
+            or previous_char is None
+            or char == previous_char
+            or char == " "
+        ):
             output_list.append(morse_code_rules[char])
-            previous_char = char
-        # Add the word interval while it's legal, it must occur
         else:
-            output_list.append(morse_code_rules[" "])
-            previous_char = None
-            continue
-        # break the outer loop due to the illegal char, or the remaining words will keep going.
-        break
+            output_list.append(LETTER_SEP)
+            output_list.append(morse_code_rules[char])
+        previous_char = char
 
-    if output_list:
-        # get rid of the last / due to the else must work
-        output_list.pop()
-        print(f"The Morse Code is {''.join(output_list)}\n")
+    print(f"The Morse Code is {''.join(output_list)}\n")
