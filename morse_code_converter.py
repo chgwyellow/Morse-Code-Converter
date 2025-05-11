@@ -1,9 +1,9 @@
 # Morse Code Rule
-# The length of a dot is one unit.
-# A dash is three units.
-# The space between parts of the same letter is one unit.
-# The space between letters is three units.
-# The space between words is seven units.
+# 1. The length of a dot is one unit.
+# 2. A dash is three units.
+# 3. The space between parts of the same letter is one unit.
+# 4. The space between letters is three units.
+# 5. The space between words is seven units.
 
 morse_code_rules = {
     "a": "·−",
@@ -45,5 +45,14 @@ morse_code_rules = {
     " ": "/",
 }
 
-input_msg = input("Morse Code Converter\nType text to convert to Morse Code!\n")
+input_msg = input("Morse Code Converter\nType text to convert to Morse Code!\n").lower()
+input_msg_list = list(input_msg)
+
 output_list = []
+
+for char in input_msg_list:
+    for key in morse_code_rules:
+        if char == key:
+            output_list.append(morse_code_rules[key])
+
+print(f"The Morse Code is: {output_list}")
